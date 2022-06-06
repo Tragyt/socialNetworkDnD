@@ -38,7 +38,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'dnd.apps.DndConfig',
     'crispy_forms',
-    'bootstrap_modal_forms',
     'crispy_bootstrap5',
 ]
 
