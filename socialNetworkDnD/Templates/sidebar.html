@@ -1,0 +1,45 @@
+<div class="flex-shrink-0 p-3 bg-dark sidenav">
+    <ul class="list-unstyled ps-0">
+        <li class="mb-1">
+            <button class="btn btn-danger btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse"
+                    data-bs-target="#home-collapse" aria-expanded="true">
+                Amici
+            </button>
+            <div class="collapse show" id="home-collapse">
+                <ul class="list-group list-group-flush">
+                    <button type="button" class="list-group-item list-group-item-action bg-dark text-light border-light">A second button item</button>
+                    <button type="button" class="list-group-item list-group-item-action bg-dark text-light border-light">A third button item</button>
+                    <button type="button" class="list-group-item list-group-item-action bg-dark text-light border-light">A fourth button item</button>
+                </ul>
+            </div>
+        </li>
+        <li class="mb-1">
+            <button class="btn btn-toggle btn-danger align-items-center rounded collapsed" data-bs-toggle="collapse"
+                    data-bs-target="#dashboard-collapse" aria-expanded="false">
+                Campagne
+            </button>
+            <a type="button" class="btn btn-warning btn-sm" href="#">+</a>
+            <div class="collapse" id="dashboard-collapse">
+                <ul class="list-group list-group-flush">
+                    <button type="button" class="list-group-item list-group-item-action bg-dark text-light border-light">A second button item</button>
+                    <button type="button" class="list-group-item list-group-item-action bg-dark text-light border-light">A third button item</button>
+                    <button type="button" class="list-group-item list-group-item-action bg-dark text-light border-light">A fourth button item</button>
+                </ul>
+            </div>
+        </li>
+        <li class="mb-1">
+            <button class="btn btn-danger btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse"
+                    data-bs-target="#orders-collapse" aria-expanded="false">
+                Personaggi
+            </button>
+            <a type="button" class="btn btn-warning btn-sm" href="{% url "character_create" %}">+</a>
+            <div class="collapse" id="orders-collapse">
+                <ul class="list-group list-group-flush">
+                    <button type="button" class="list-group-item list-group-item-action bg-dark text-light border-light">A second button item</button>
+                    <button type="button" class="list-group-item list-group-item-action bg-dark text-light border-light">A third button item</button>
+                    <button type="button" class="list-group-item list-group-item-action bg-dark text-light border-light">A fourth button item</button>
+                </ul>
+            </div>
+        </li>
+    </ul>
+</div>

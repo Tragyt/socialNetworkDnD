@@ -1,0 +1,33 @@
+{% load crispy_forms_tags %}
+{% load static %}
+
+<nav class="navbar navbar-expand-lg navbar-dark bg light " style="background:chocolate">
+    <div class="container-fluid">
+        <div class="col-1">
+            <a class="navbar-brand" href="{% url 'home' %}"><img src="{% static 'images/logo.png' %}" width="100"
+                                                                 height="50"/></a>
+        </div>
+        <div class="col-3">
+            <a class="navbar-brand">DUNGEONS AND DRAGONS SOCIAL</a>
+        </div>
+        <div class="col-4">
+            <form class="d-flex me-3" action="{% url 'search' %}" method="POST"> {% csrf_token %}
+                <input id="txtSearch" class="form-control me-1" name="Search" type="search" placeholder="Search User"
+                       aria-label="Search">
+                <input type="submit" class="btn btn-success" value="Search">
+            </form>
+        </div>
+        <div class="col-2">
+            <div class="dropdown">
+                <button class="btn btn-lg btn-warning dropdown-toggle" type="button" id="dropdownMenuButton1"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="bi bi-person-fill"></i>
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                    <li><a class="dropdown-item bg-warning" href="{% url 'home' %}">Profilo</a></li>
+                    <li><a class="dropdown-item bg-warning" href="{% url 'logout' %}">Logout</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</nav>

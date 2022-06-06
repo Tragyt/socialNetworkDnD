@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+    {% include "Navbar.html" %}
+
+
+    <div class="row" style="width: 100%">
+        <div class="col-2 bg-dark" style="height: 670px;">
+            <div class="sidenav">
+                {% include "sidebar.html" %}
+            </div>
+        </div>
+        <div class="col-10">
+            {% block main %}
+
+            {% endblock %}
+        </div>
+    </div>
+
+{% endblock %}

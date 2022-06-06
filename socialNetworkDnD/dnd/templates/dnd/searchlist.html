@@ -1,0 +1,16 @@
+{% extends "shell.html" %}
+
+{% block main %}
+    <form action="{% url 'home' %}" method="POST"> {% csrf_token %}
+        {% for p in object_list %}
+            {% if p == "0" %}
+                <h1>Nessun Risultato</h1>
+
+            {% else %}
+                <ul>
+                    <input type="submit" value="{{ p.user.username }}" name="name">
+                </ul>
+            {% endif %}
+        {% endfor %}
+    </form>
+{% endblock %}
