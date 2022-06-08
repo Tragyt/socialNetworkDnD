@@ -2,15 +2,29 @@
 
 {% block main %}
     <form action="{% url 'home' %}" method="POST"> {% csrf_token %}
-        {% for p in object_list %}
-            {% if p == "0" %}
-                <h1>Nessun Risultato</h1>
-
-            {% else %}
-                <ul>
-                    <input type="submit" value="{{ p.user.username }}" name="name">
-                </ul>
-            {% endif %}
-        {% endfor %}
+        {% if object_list|length == 0 %}
+            <h1>Nessun Risultato</h1>
+        {% else %}
+            <table class="table">
+                <tbody>
+                {% for p in object_list %}
+                    <tr>
+                        <th scope="col">
+                            <img src="/media/{{ p.img }}" width="50" height="50">
+                        </th>
+                        <th scope="col">
+                            <input type="submit" class="btn btn-info" value="{{ p.user.username }}" name="name">
+                        </th>
+                        <th scope="col">
+                            {{ p.user.email }}
+                        </th>
+                     <th scope="col">
+                            {{ p.bio }}
+                        </th>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        {% endif %}
     </form>
 {% endblock %}

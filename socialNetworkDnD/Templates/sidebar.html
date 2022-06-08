@@ -5,12 +5,18 @@
                     data-bs-target="#home-collapse" aria-expanded="true">
                 Amici
             </button>
+            <a type="button" class="btn btn-info rounded-circle btn-sm"
+               href="{% url "list_requests" %}">{{ requests }}</a>
             <div class="collapse show" id="home-collapse">
+            <form action="{% url 'home' %}" method="POST"> {% csrf_token %}
                 <ul class="list-group list-group-flush">
-                    <button type="button" class="list-group-item list-group-item-action bg-dark text-light border-light">A second button item</button>
-                    <button type="button" class="list-group-item list-group-item-action bg-dark text-light border-light">A third button item</button>
-                    <button type="button" class="list-group-item list-group-item-action bg-dark text-light border-light">A fourth button item</button>
+                    {% for p in friends %}
+                        <input type="submit" value="{{ p.username }}" name="name"
+                                class="list-group-item list-group-item-action bg-dark text-light border-light">
+
+                    {% endfor %}
                 </ul>
+            </form>
             </div>
         </li>
         <li class="mb-1">
@@ -21,9 +27,18 @@
             <a type="button" class="btn btn-warning btn-sm" href="#">+</a>
             <div class="collapse" id="dashboard-collapse">
                 <ul class="list-group list-group-flush">
-                    <button type="button" class="list-group-item list-group-item-action bg-dark text-light border-light">A second button item</button>
-                    <button type="button" class="list-group-item list-group-item-action bg-dark text-light border-light">A third button item</button>
-                    <button type="button" class="list-group-item list-group-item-action bg-dark text-light border-light">A fourth button item</button>
+                    <button type="button"
+                            class="list-group-item list-group-item-action bg-dark text-light border-light">A second
+                        button item
+                    </button>
+                    <button type="button"
+                            class="list-group-item list-group-item-action bg-dark text-light border-light">A third
+                        button item
+                    </button>
+                    <button type="button"
+                            class="list-group-item list-group-item-action bg-dark text-light border-light">A fourth
+                        button item
+                    </button>
                 </ul>
             </div>
         </li>
@@ -35,9 +50,18 @@
             <a type="button" class="btn btn-warning btn-sm" href="{% url "character_create" %}">+</a>
             <div class="collapse" id="orders-collapse">
                 <ul class="list-group list-group-flush">
-                    <button type="button" class="list-group-item list-group-item-action bg-dark text-light border-light">A second button item</button>
-                    <button type="button" class="list-group-item list-group-item-action bg-dark text-light border-light">A third button item</button>
-                    <button type="button" class="list-group-item list-group-item-action bg-dark text-light border-light">A fourth button item</button>
+                    <button type="button"
+                            class="list-group-item list-group-item-action bg-dark text-light border-light">A second
+                        button item
+                    </button>
+                    <button type="button"
+                            class="list-group-item list-group-item-action bg-dark text-light border-light">A third
+                        button item
+                    </button>
+                    <button type="button"
+                            class="list-group-item list-group-item-action bg-dark text-light border-light">A fourth
+                        button item
+                    </button>
                 </ul>
             </div>
         </li>

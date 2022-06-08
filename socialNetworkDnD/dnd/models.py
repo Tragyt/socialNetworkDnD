@@ -96,7 +96,7 @@ def save_user_profile(sender, instance, **kwargs):
 
 
 class Friendship(models.Model):
-    user1 = models.ForeignKey(Profile, on_delete=models.DO_NOTHING, related_name="utente_richiesta")
-    user2 = models.ForeignKey(Profile, on_delete=models.DO_NOTHING, related_name="utente_accettazione")
+    user1 = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name="utente_richiesta")
+    user2 = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name="utente_accettazione")
     status = models.CharField(choices=FRIENDSHIP_STATUS, max_length=20, default=False)
 
