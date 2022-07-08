@@ -39,6 +39,8 @@ INSTALLED_APPS = [
     'dnd.apps.DndConfig',
     'crispy_forms',
     'crispy_bootstrap5',
+    'characters.apps.CharactersConfig',
+    'campaigns.apps.CampaignsConfig'
 ]
 
 # CRISPY_TEMPLATE_PACK = "bootstrap4"
@@ -63,7 +65,10 @@ TEMPLATES = [
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [os.path.join(BASE_DIR, "Templates"),
                  os.path.join(BASE_DIR, "auth/templates/auth"),
-                 os.path.join(BASE_DIR, "dnd/templates/dnd")],
+                 os.path.join(BASE_DIR, "dnd/templates/dnd"),
+                 os.path.join(BASE_DIR, "characters/templates/characters"),
+                 os.path.join(BASE_DIR, "campaigns/templates/campaigns"),
+                 ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

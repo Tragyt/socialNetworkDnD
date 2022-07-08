@@ -3,23 +3,16 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.urls import reverse_lazy
 
+from characters.models import Character
+from socialNetworkDnD.views import new_requests, list_friends, list_characters, ListBaseView, UpdateBaseView, \
+    list_campaigns, get_context
 from .forms import UpdateUserForm, UpdateProfileForm
-from .models import Profile, Character, Friendship
+from .models import Profile, Friendship
 from django.shortcuts import render, get_object_or_404, redirect
-from django.views.generic import ListView, CreateView, UpdateView
+from django.views.generic import ListView
 from django.contrib import messages
 
 app_name = 'dnd'
-
-
-def new_requests(id):
-    return Friendship.objects.filter(user2_id=id, status="not yet").count()
-
-
-def list_friends(id):
-    friends = Friendship.objects.filter(user2_id=id, status="Friends").values("user1_id")
-    profiles = Profile.objects.filter(user_id__in=friends).values("user_id")
-    return User.objects.filter(id__in=profiles).values("username")
 
 
 @login_required
@@ -31,8 +24,9 @@ def home_page(request):
 
     ctx = {"utente": profile.user.username, "email": profile.user.email, "description": profile.bio, "pk": profile.pk,
            "img": profile.img, "last_name": profile.user.last_name, "first_name": profile.user.first_name,
-           "user_pk": profile.user.pk, "requests": new_requests(profile.user_id),
-           "friends": list_friends(profile.user_id)}
+           "user_pk": profile.user.pk, "requests": new_requests(profile.user_id), "experience": profile.experience,
+           "friends": list_friends(profile.user_id), "characters": list_characters(profile.user_id),
+           "campaigns": list_campaigns(profile.user_id)}
     return render(request, "profile.html", context=ctx)
 
 
@@ -47,21 +41,20 @@ def search(request):
     return redirect("search_list", " ")
 
 
-class SearchUserList(LoginRequiredMixin, ListView):
+class SearchUserList(ListBaseView):
     model = Profile, User
-    template_name = "dnd/searchlist.html"
 
     def get_queryset(self):
         search_string = self.request.resolver_match.kwargs["search_string"]
+        this_user = self.request.user.username
 
-        results = Profile.objects.select_related("user").filter(user__username__icontains=search_string)
+        results = (Profile.objects.select_related("user").filter(
+            user__username__icontains=search_string)
+                   | Profile.objects.select_related("user").filter(user__email__icontains=search_string)
+                   | Profile.objects.select_related("user").filter(user__last_name__icontains=search_string)
+                   | Profile.objects.select_related("user").filter(user__first_name__icontains=search_string)) \
+            .exclude(user__username=this_user)
         return results
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context["requests"] = new_requests(self.request.user.pk)
-        context["friends"] = list_friends(self.request.user.pk)
-        return context
 
 
 class UserProfile(LoginRequiredMixin, ListView):
@@ -85,50 +78,24 @@ class UserProfile(LoginRequiredMixin, ListView):
         else:
             context["friendship"] = is_friend[0].status
 
-        context["requests"] = new_requests(self.request.user.pk)
-        context["friends"] = list_friends(self.request.user.pk)
+        context = get_context(self, context)
+
+        context["his_friends"] = Friendship.objects.filter(user2_id=self.pk, status="Friends")
+        context["his_characters"] = Character.objects.filter(user_id=self.pk)
+
         return context
 
 
-class CharacterCreate(LoginRequiredMixin, CreateView):
-    model = Character
-    template_name = "formsTemplate.html"
-    fields = "__all__"
-    success_url = "home"
-
-    # form = CharacterForm
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context["requests"] = new_requests(self.request.user.pk)
-        context["friends"] = list_friends(self.request.user.pk)
-        return context
-
-
-class ProfileSettings(LoginRequiredMixin, UpdateView):
+class ProfileSettings(UpdateBaseView):
     model = Profile
-    template_name = "formsTemplate.html"
     form_class = UpdateProfileForm
     success_url = reverse_lazy("home")
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context["requests"] = new_requests(self.request.user.pk)
-        context["friends"] = list_friends(self.request.user.pk)
-        return context
 
-
-class UserSettings(LoginRequiredMixin, UpdateView):
+class UserSettings(UpdateBaseView):
     model = User
-    template_name = "formsTemplate.html"
     form_class = UpdateUserForm
     success_url = reverse_lazy("home")
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context["requests"] = new_requests(self.request.user.pk)
-        context["friends"] = list_friends(self.request.user.pk)
-        return context
 
 
 @login_required
@@ -160,17 +127,10 @@ def friend_request(request, **kwargs):
     return redirect("user_profile", username, user1.user.id)
 
 
-class FriendRequests(LoginRequiredMixin, ListView):
+class FriendRequests(ListBaseView):
     model = Friendship, Profile
-    template_name = "searchlist.html"
 
     def get_queryset(self):
         requests = Friendship.objects.filter(user2_id=self.request.user.pk, status="not yet").values_list("user1")
         results = Profile.objects.filter(user_id__in=requests)
         return results
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context["requests"] = new_requests(self.request.user.pk)
-        context["friends"] = list_friends(self.request.user.pk)
-        return context

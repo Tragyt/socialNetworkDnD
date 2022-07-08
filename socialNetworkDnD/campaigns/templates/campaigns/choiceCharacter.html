@@ -1,0 +1,34 @@
+{% extends "shell.html" %}
+
+{% block main %}
+    <div class="container" style="overflow:auto; height:650px;">
+        <table class="table table-striped">
+            {% for p in Friends %}
+                <thead>
+                <tr>
+                    <th scope="col">{{ p.user2.username }}</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for j in Characters %}
+                    {% if j.user == p.user2 %}
+                        <tr>
+                            <td>
+                                <img src="/media/{{ j.img }}" width="50" height="50">
+                            </td>
+                            <td>
+                                <a type="submit"
+                                   href="{% url 'add_character' id_character=j.id id_campaing=id_campaign %}"
+                                   class="list-group-item list-group-item-action">
+                                    {{ j.name }} {{ j.id }}
+                                </a>
+                            </td>
+                        </tr>
+
+                    {% endif %}
+                {% endfor %}
+                </tbody>
+            {% endfor %}
+        </table>
+    </div>
+{% endblock %}

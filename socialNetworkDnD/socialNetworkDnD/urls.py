@@ -24,5 +24,6 @@ urlpatterns = [
                   path('admin/', admin.site.urls),
                   path('auth/', include('auth.urls'), name='auth'),
                   path('dnd/', include('dnd.urls'), name='dnd'),
-
+                  path('characters/', include('characters.urls'), name='characters'),
+                  path('campaigns/', include('campaigns.urls'), name='campaigns'),
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

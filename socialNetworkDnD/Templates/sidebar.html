@@ -3,66 +3,53 @@
         <li class="mb-1">
             <button class="btn btn-danger btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse"
                     data-bs-target="#home-collapse" aria-expanded="true">
-                Amici
+                Friends
             </button>
             <a type="button" class="btn btn-info rounded-circle btn-sm"
                href="{% url "list_requests" %}">{{ requests }}</a>
             <div class="collapse show" id="home-collapse">
-            <form action="{% url 'home' %}" method="POST"> {% csrf_token %}
-                <ul class="list-group list-group-flush">
-                    {% for p in friends %}
-                        <input type="submit" value="{{ p.username }}" name="name"
-                                class="list-group-item list-group-item-action bg-dark text-light border-light">
+                <form action="{% url 'home' %}" method="POST"> {% csrf_token %}
+                    <ul class="list-group list-group-flush">
+                        {% for p in friends %}
+                            <input type="submit" value="{{ p.username }}" name="name"
+                                   class="list-group-item list-group-item-action bg-dark text-light border-light">
 
-                    {% endfor %}
-                </ul>
-            </form>
+                        {% endfor %}
+                    </ul>
+                </form>
             </div>
         </li>
         <li class="mb-1">
             <button class="btn btn-toggle btn-danger align-items-center rounded collapsed" data-bs-toggle="collapse"
                     data-bs-target="#dashboard-collapse" aria-expanded="false">
-                Campagne
+                Campaings
             </button>
-            <a type="button" class="btn btn-warning btn-sm" href="#">+</a>
+            <a type="button" class="btn btn-warning btn-sm" href="{% url 'create_campaign' %}">+</a>
             <div class="collapse" id="dashboard-collapse">
                 <ul class="list-group list-group-flush">
-                    <button type="button"
-                            class="list-group-item list-group-item-action bg-dark text-light border-light">A second
-                        button item
-                    </button>
-                    <button type="button"
-                            class="list-group-item list-group-item-action bg-dark text-light border-light">A third
-                        button item
-                    </button>
-                    <button type="button"
-                            class="list-group-item list-group-item-action bg-dark text-light border-light">A fourth
-                        button item
-                    </button>
+                    {% for p in campaigns %}
+                        <a type="submit" href="{% url 'campaign_view' pk=p.id %}"
+                           class="list-group-item list-group-item-action bg-dark text-light border-light">
+                            {{ p.name }} </a>
+                    {% endfor %}
                 </ul>
             </div>
         </li>
         <li class="mb-1">
             <button class="btn btn-danger btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse"
                     data-bs-target="#orders-collapse" aria-expanded="false">
-                Personaggi
+                Characters
             </button>
-            <a type="button" class="btn btn-warning btn-sm" href="{% url "character_create" %}">+</a>
+            <a type="button" class="btn btn-warning btn-sm" href="{% url "create" %}">+</a>
             <div class="collapse" id="orders-collapse">
-                <ul class="list-group list-group-flush">
-                    <button type="button"
-                            class="list-group-item list-group-item-action bg-dark text-light border-light">A second
-                        button item
-                    </button>
-                    <button type="button"
-                            class="list-group-item list-group-item-action bg-dark text-light border-light">A third
-                        button item
-                    </button>
-                    <button type="button"
-                            class="list-group-item list-group-item-action bg-dark text-light border-light">A fourth
-                        button item
-                    </button>
-                </ul>
+                <form action="{% url 'sheet' %}" method="POST"> {% csrf_token %}
+                    <ul class="list-group list-group-flush">
+                        {% for p in characters %}
+                            <input type="submit" value="{{ p.name }}" name="name"
+                                   class="list-group-item list-group-item-action bg-dark text-light border-light">
+                        {% endfor %}
+                    </ul>
+                </form>
             </div>
         </li>
     </ul>

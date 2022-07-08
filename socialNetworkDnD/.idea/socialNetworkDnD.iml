@@ -26,6 +26,10 @@
     <option name="TEMPLATE_FOLDERS">
       <list>
         <option value="$MODULE_DIR$/auth/templates" />
+        <option value="$MODULE_DIR$/characters/templates/characters" />
+        <option value="$MODULE_DIR$/dnd/templates/dnd" />
+        <option value="$MODULE_DIR$/Templates" />
+        <option value="$MODULE_DIR$/campaigns/templates/campaigns" />
       </list>
     </option>
   </component>

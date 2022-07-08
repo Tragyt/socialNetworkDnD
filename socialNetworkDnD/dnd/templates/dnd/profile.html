@@ -1,66 +1,141 @@
 {% extends "shell.html" %}
+{% load extra %}
 
 {% block main %}
 
-    <div class="row ms-1 mt-5">
-        <div class="col-3">
-            <div class="card ">
-                <img src="/media/{{ img }}{{ object_list.img }}" class="card-img-top">
-                <div class="card-body">
-                    <h1>{{ utente }}</h1>
-                    <h1>{{ object_list.user.username }}</h1>
-                    <h5 class="card-title">{{ description }} {{ object_list.bio }} </h5>
-                </div>
-                {% if utente != null %}
-                    <div class="card-footer text-center">
-                        <a type="button" class="btn btn-warning btn-sm"
-                           href="{% url "profile_update" pk=pk %}">Update</a>
-                    </div>
-                {% endif %}
-            </div>
-        </div>
-        <div class="col-6">
-            <div class="card">
-                <div class="card-body">
-                    <p class="card-text">Email: {{ email }} {{ object_list.user.email }} </p>
-                    <p class="card-text">Last name: {{ last_name }} {{ object_list.user.last_name }}</p>
-                    <p class="card-text">First name: {{ first_name }} {{ object_list.user.first_name }}</p>
-                </div>
-                {% if utente != null %}
-                    <div class="card-footer text-center">
-                        <a type="button" class="btn btn-warning btn-sm"
-                           href="{% url "user_update" pk=user_pk %}">Update</a>
-                    </div>
-                {% endif %}
-            </div>
-        </div>
-        {% if utente == null %}
-            <div class="col-3">
-                {% if messages %}
-                    {% for message in messages %}
-                        <div class="alert alert-primary alert-dismissible" role="alert">
-                            {{ message }}
-                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                        </div>
-                    {% endfor %}
-                {% endif %}
+    <style>
+        .scrollbar {
+            position: relative;
+            height: 400px;
+            overflow: auto;
+        }
 
-                <div class="col-1">
-                    {% if friendship == "None" %}
-                        <a type="button" class="btn btn-info"
-                           href="{% url "friend_request" profile=object_list.user.pk action="request" %}"><i
-                                class="bi bi-suit-heart-fill"></i></a>
-                    {% elif friendship == "not yet" %}
-                        <a type="button" class="btn btn-secondary mt-2"
-                           href="{% url "friend_request" profile=object_list.user.pk action="remove" %}"><i
-                                class="bi bi-suit-heart"></i></a>
-                    {% elif friendship == "Friends" %}
-                        <a type="button" class="btn btn-dark"
-                           href="{% url "friend_request" profile=object_list.user.pk action="remove" %}"><i
-                                class="bi bi-heartbreak-fill"></i></a>
+        .scroll-y {
+            display: block;
+        }
+    </style>
+    <div class="container" style="overflow:auto; height:650px;">
+        <div class="row ms-1 mt-5">
+            <div class="col-3">
+                <div class="card ">
+                    <img src="/media/{{ img }}{{ object_list.img }}" class="card-img-top">
+                    <div class="card-body">
+                        <h1>{{ utente }}</h1>
+                        <h1>{{ object_list.user.username }}</h1>
+                        <h5 class="card-title">{{ description }} {{ object_list.bio }} </h5>
+                    </div>
+                    {% if utente != null %}
+                        <div class="card-footer text-center">
+                            <a type="button" class="btn btn-warning btn-sm"
+                               href="{% url "profile_update" pk=pk %}">Update</a>
+                        </div>
                     {% endif %}
                 </div>
             </div>
-        {% endif %}
+            <div class="col-8">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-6">
+                                    <p class="card-text">Email: {{ email }} {{ object_list.user.email }} </p>
+                                </div>
+                                <div class="col-6">
+                                    <p class="card-text">Last name: {{ last_name }} {{ object_list.user.last_name }}</p>
+                                </div>
+                                <div class="col-6">
+                                    <p class="card-text">First
+                                        name: {{ first_name }} {{ object_list.user.first_name }}</p>
+                                </div>
+                            </div>
+                        </div>
+                        {% if utente != null %}
+                            <div class="card-footer text-center">
+                                <a type="button" class="btn btn-warning btn-sm"
+                                   href="{% url "user_update" pk=user_pk %}">Update</a>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+                {% if utente == null %}
+                    <div class="row">
+                        <div class="col-6 mt-3 scrollbar scroll-y">
+                            <table class="table">
+                                <thead>
+                                <th>Friends</th>
+                                </thead>
+                                <tbody>
+                                {% for p in his_friends %}
+                                    <tr>
+                                        <td scope="col">
+                                            {{ p.user1.username }}
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="col-6 mt-3 scrollbar scroll-y">
+                            <table class="table">
+                                <thead>
+                                <th>Characters</th>
+                                </thead>
+                                <tbody>
+                                {% for p in his_characters %}
+                                    {% if p.public or request.user|friend:p.user %}
+                                    <tr>
+                                        <td scope="col">
+                                            <a type="submit" href="{% url 'sheet_view' pk=p.pk %}"
+                                               class="list-group-item list-group-item-action border-light">
+                                                {{ p.name }}
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    {% endif %}
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+            {% if utente == null %}
+                <div class="col-1">
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="alert alert-primary alert-dismissible" role="alert">
+                                {{ message }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                        aria-label="Close"></button>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+
+                    <div class="col-1">
+                        {% if friendship == "None" %}
+                            <a type="button" class="btn btn-info"
+                               href="{% url "friend_request" profile=object_list.user.pk action="request" %}"><i
+                                    class="bi bi-suit-heart-fill"></i></a>
+                        {% elif friendship == "not yet" %}
+                            <a type="button" class="btn btn-secondary mt-2"
+                               href="{% url "friend_request" profile=object_list.user.pk action="remove" %}"><i
+                                    class="bi bi-suit-heart"></i></a>
+                        {% elif friendship == "Friends" %}
+                            <a type="button" class="btn btn-dark"
+                               href="{% url "friend_request" profile=object_list.user.pk action="remove" %}"><i
+                                    class="bi bi-heartbreak-fill"></i></a>
+                        {% endif %}
+                    </div>
+                </div>
+            {% endif %}
+            <div class="col-3 mt-3">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Experiences</h2>
+                    </div>
+                    <div class="card-body">{{ experience }}{{ object_list.experience }}</div>
+                </div>
+            </div>
+        </div>
     </div>
 {% endblock %}

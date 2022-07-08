@@ -1,0 +1,116 @@
+{% extends "shell.html" %}
+{% load extraTags %}
+
+{% block main %}
+
+    <div class="container" style="overflow:auto; height:650px;">
+        <div class="row text-center">
+            <h1>{{ object_list.name }}</h1>
+        </div>
+        <div class="row">
+            <div class="col-9">
+                <div class="row">
+                    <div class="col-2">
+                        {% if object_list.master.user_id  == request.user.pk %}
+                            <a type="button" class="btn btn-warning btn-sm"
+                               href="{% url 'new_post' pk=object_list.id %}">Add Post</a>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="row">
+                    {% for p in posts %}
+                        <div class="card mt-5">
+                            <div class="card-header">
+                                <div class="row">
+                                    <div class="col-10">
+                                        <h1 class="card-title">{{ p.title }}</h1>
+                                        <h4>{{ p.date }}</h4>
+                                    </div>
+                                    <div class="col-2">
+                                        {% if object_list.master.user_id  == request.user.pk %}
+                                            <a type="button" class="btn-close" aria-label="Close"
+                                               style="padding-left: 230px;"
+                                               href="{% url 'delete_post' post=p.id campaign=object_list.id %}"></a>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                            {% if p.img %}
+                                <img class="card-img" src="/media/{{ p.img }}">
+                            {% endif %}
+                            <div class="card-body">
+                                {{ p.body }}
+                            </div>
+                            <div class="card-footer">
+                                <div class="row">
+                                    <div class="col-2">
+                                        {% if p.id|upvote:request.user.pk %}
+                                            <a type="submit"
+                                               href="{% url 'upvote' post_id=p.id campaign=object_list.id %}">
+                                                <i class="bi bi-arrow-up-circle-fill"></i>
+                                            </a>
+                                        {% else %}
+                                            <a type="submit"
+                                               href="{% url 'upvote' post_id=p.id campaign=object_list.id %}">
+                                                <i class="bi bi-arrow-up-circle"></i>
+                                            </a>
+                                        {% endif %}
+                                        {{ p.upvote }}
+
+                                        {% if p.id|downvote:request.user.pk %}
+                                            <a type="submit"
+                                               href="{% url 'downvote' post_id=p.id campaign=object_list.id %}"><i
+                                                    class="bi bi-arrow-down-circle-fill"></i></a>
+                                        {% else %}
+                                            <a type="submit"
+                                               href="{% url 'downvote' post_id=p.id campaign=object_list.id %}"><i
+                                                    class="bi bi-arrow-down-circle"></i></a>
+                                        {% endif %}
+                                        {{ p.downvote }}
+                                    </div>
+                                    <div class="col-8"></div>
+                                    <div class="col-2">
+                                        <a type="button" class="btn btn-info" href="{% url 'comments' pk=p.id %}">Comments</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="col-3">
+                {% if object_list.master.user_id  == request.user.pk %}
+                    <a type="button" class="btn btn-warning btn-sm"
+                       href="{% url 'choice_character' pk=object_list.id %}">
+                        Add Character
+                    </a>
+                {% endif %}
+                <table class="table table">
+                    <tbody>
+                    {% for p in object_list.characters.all %}
+                        <tr>
+                            <td>
+                                <a type="submit"
+                                   href="{% url 'sheet_view' pk=p.id %}"
+                                   class="list-group-item list-group-item-action">
+                                    {{ p.name }}
+                                </a>
+                            </td>
+                            <td>
+                                {% if object_list.master.user_id  == request.user.pk %}
+                                    <a type="submit"
+                                       href="{% url 'remove_character' id_character=p.id id_campaing=object_list.id %}"
+                                       class="btn btn-danger btn-sm">
+                                        X
+                                    </a>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

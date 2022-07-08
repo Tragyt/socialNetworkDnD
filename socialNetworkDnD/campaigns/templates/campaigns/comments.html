@@ -1,0 +1,32 @@
+{% extends "shell.html" %}
+
+{% block main %}
+    <div class="row mt-3">
+        <form class="d-flex me-3" action="{% url 'new_comment' id=post_id %}"
+              method="POST"> {% csrf_token %}
+            <input class="form-control me-1" name="text">
+            <input type="submit" class="btn btn-warning" value="Send">
+        </form>
+    </div>
+
+    <div class="container mt-5" style="overflow:auto; height:600px;">
+        {% for p in object_list %}
+            <div class="row">
+                {% if p.Profile.user.id != request.user.pk %}
+                    <div class="col-6"></div>
+                {% endif %}
+                <div class="col-6">
+                    <div class="card">
+                        <div class="card-header">
+                            {{ p.Profile.user.username }}
+                        </div>
+                        <div class="card-body">
+                            {{ p.text }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+{% endblock %}

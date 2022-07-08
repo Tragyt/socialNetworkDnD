@@ -1,0 +1,691 @@
+{% extends "shell.html" %}
+
+{% block main %}
+    <div class="container" style="overflow:auto; height:650px;">
+
+        <div class="row mt-3">
+            <div class="col-4 ">
+                <div class="card ">
+                    <div class="card-header text-center">
+                        <h5 class="card-title">{{ object_list.name }}</h5>
+                    </div>
+                    <div class="card-body">
+                        <img src="/media/{{ object_list.img }}" class="card-img-top" height=200>
+                    </div>
+                    {% if object_list.user_id == request.user.pk %}
+                        <div class="card-footer text-center">
+                            <a type="button" class="btn btn-warning btn-sm"
+                               href="{% url 'update_img' pk=object_list.pk %}">Update</a>
+                         <a type="button" class="btn btn-danger btn-sm"
+                               href="{% url 'delete_character' pk=object_list.pk %}">Delete</a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-8">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card ">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-4">
+                                        <p class="card-text">Class: {{ object_list.get_clss_display }} </p>
+                                    </div>
+                                    <div class="col-4">
+                                        <p class="card-text">PlayerName: {{ object_list.user.first_name }}</p>
+                                    </div>
+                                    <div class="col-4">
+                                        <p class="card-text">Race: {{ object_list.get_race_display }}</p>
+                                    </div>
+                                    <div class="col-4">
+                                        <p class="card-text">Alignment: {{ object_list.get_alignment_display }}</p>
+                                    </div>
+                                    <div class="col-4">
+                                        <p class="card-text">Level: {{ object_list.level }}</p>
+                                    </div>
+                                    <div class="col-4">
+                                        {% if object_list.user_id == request.user.pk %}
+                                            <a type="button"
+                                               class="btn btn-info btn-sm {% if object_list.level == 20 %} disabled {% endif %}"
+                                               href="{% url 'level_up' pk=object_list.pk %}">Level Up</a>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-4 mt-3">
+                        <div class="card">
+                            <div class="card-body text-center">
+                                {{ object_list.AC }}
+                            </div>
+                            <div class="card-footer text-center">
+                                Armor Class
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-4 mt-3">
+                        <div class="card">
+                            <div class="card-body text-center">
+                                {{ object_list.Initiative }}
+                            </div>
+                            <div class="card-footer text-center">
+                                Initiative
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-4 mt-3">
+                        <div class="card">
+                            <div class="card-body text-center">
+                                {{ object_list.Speed }}
+                            </div>
+                            <div class="card-footer text-center">
+                                Speed
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-4 mt-3">
+                        <div class="card">
+                            <div class="card-body text-center">
+                                +{{ object_list.proficientyBonus }}
+                            </div>
+                            <div class="card-footer text-center">
+                                Proficiency
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-4 mt-3">
+                        <div class="card">
+                            <div class="card-body text-center">
+                                {{ object_list.Hp }}
+                            </div>
+                            <div class="card-footer text-center">
+                                Hit Points
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-4 mt-3">
+                        <div class="card">
+                            <div class="card-body text-center">
+                                {{ object_list.passivePerception }}
+                            </div>
+                            <div class="card-footer text-center">
+                                Passive Perception
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-3">
+            <div class="col-3">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title">Strenght</h5>
+                    </div>
+                    <div class="card-body text-center">
+                        {{ object_list.strenght }}
+                    </div>
+                </div>
+                <div class="card mt-3">
+                    <div class="card-header">
+                        <h5 class="card-title">Dexterity</h5>
+                    </div>
+                    <div class="card-body text-center">
+                        {{ object_list.dexterity }}
+                    </div>
+                </div>
+                <div class="card mt-3">
+                    <div class="card-header">
+                        <h5 class="card-title">Constitution</h5>
+                    </div>
+                    <div class="card-body text-center">
+                        {{ object_list.constitution }}
+                    </div>
+                </div>
+                <div class="card mt-3">
+                    <div class="card-header">
+                        <h5 class="card-title">Intelligence</h5>
+                    </div>
+                    <div class="card-body text-center">
+                        {{ object_list.intelligence }}
+                    </div>
+                </div>
+                <div class="card mt-3">
+                    <div class="card-header">
+                        <h5 class="card-title">Wisdom</h5>
+                    </div>
+                    <div class="card-body text-center">
+                        {{ object_list.wisdom }}
+                    </div>
+                </div>
+                <div class="card mt-3">
+                    <div class="card-header">
+                        <h5 class="card-title">Charisma</h5>
+                    </div>
+                    <div class="card-body text-center">
+                        {{ object_list.charisma }}
+                    </div>
+                </div>
+            </div>
+            <div class="col-3">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title">Saving Throws</h5>
+                    </div>
+                    <div class="card-body">
+                        <ul style="list-style-type:none;">
+                            <li>
+                                {% if proficiencies.saving_strenght %}
+                                    <input class="form-check-input" type="checkbox" name="flexRadioDefault" checked
+                                           disabled>
+                                    strenght:
+                                    {% if object_list.saving_strenght|add:object_list.proficientyBonus > 0 %}+
+                                    {% endif %}
+                                    {{ object_list.saving_strenght|add:object_list.proficientyBonus }}
+                                {% else %}
+                                    <input class="form-check-input" type="checkbox" name="flexRadioDefault"
+                                           disabled>
+                                    strenght:
+                                    {% if object_list.saving_strenght > 0 %}+{% endif %}
+                                    {{ object_list.saving_strenght }}
+                                {% endif %}
+                            </li>
+                            <li>
+                                {% if proficiencies.saving_dexterity %}
+                                    <input class="form-check-input" type="checkbox" name="flexRadioDefault" checked
+                                           disabled>
+                                    dexterity:
+                                    {% if object_list.saving_dexterity|add:object_list.proficientyBonus > 0 %}+
+                                    {% endif %}
+                                    {{ object_list.saving_dexterity|add:object_list.proficientyBonus }}
+                                {% else %}
+                                    <input class="form-check-input" type="checkbox" name="flexRadioDefault"
+                                           disabled>
+                                    dexterity:
+                                    {% if object_list.saving_dexterity > 0 %}+{% endif %}
+                                    {{ object_list.saving_dexterity }}
+                                {% endif %}
+
+                            </li>
+                            <li>
+                                {% if proficiencies.saving_constitution %}
+                                    <input class="form-check-input" type="checkbox" name="flexRadioDefault"
+                                           checked disabled>
+                                    constitution:
+                                    {% if object_list.saving_constitution|add:object_list.proficientyBonus > 0 %}+
+                                    {% endif %}
+                                    {{ object_list.saving_constitution|add:object_list.proficientyBonus }}
+                                {% else %}
+                                    <input class="form-check-input" type="checkbox" name="flexRadioDefault"
+                                           disabled>
+                                    constitution:
+                                    {% if object_list.saving_constitution > 0 %}+{% endif %}
+                                    {{ object_list.saving_constitution }}
+                                {% endif %}
+
+                            </li>
+                            <li>
+                                {% if proficiencies.saving_intelligence %}
+                                    <input class="form-check-input" type="checkbox" name="flexRadioDefault"
+                                           checked disabled>
+                                    intelligence:
+                                    {% if object_list.saving_intelligence|add:object_list.proficientyBonus > 0 %}+
+                                    {% endif %}
+                                    {{ object_list.saving_intelligence|add:object_list.proficientyBonus }}
+                                {% else %}
+                                    <input class="form-check-input" type="checkbox" name="flexRadioDefault"
+                                           disabled>
+                                    intelligence:
+                                    {% if object_list.saving_intelligence > 0 %}+{% endif %}
+                                    {{ object_list.saving_intelligence }}
+                                {% endif %}
+                            </li>
+                            <li>
+                                {% if proficiencies.saving_wisdom %}
+                                    <input class="form-check-input" type="checkbox" name="flexRadioDefault"
+                                           checked disabled>
+                                    wisdom:
+                                    {% if object_list.saving_wisdom|add:object_list.proficientyBonus > 0 %}+{% endif %}
+                                    {{ object_list.saving_wisdom|add:object_list.proficientyBonus }}
+                                {% else %}
+                                    <input class="form-check-input" type="checkbox" name="flexRadioDefault"
+                                           disabled>
+                                    wisdom:
+                                    {% if object_list.saving_wisdom > 0 %}+{% endif %}
+                                    {{ object_list.saving_wisdom }}
+                                {% endif %}
+                            </li>
+                            <li>
+                                {% if proficiencies.saving_charisma %}
+                                    <input class="form-check-input" type="checkbox" name="flexRadioDefault"
+                                           checked disabled>
+                                    charisma:
+                                    {% if object_list.saving_charisma|add:object_list.proficientyBonus > 0 %}+
+                                    {% endif %}
+                                    {{ object_list.saving_charisma|add:object_list.proficientyBonus }}
+                                {% else %}
+                                    <input class="form-check-input" type="checkbox" name="flexRadioDefault"
+                                           disabled>
+                                    charisma:
+                                    {% if object_list.saving_charisma > 0 %}+{% endif %}
+                                    {{ object_list.saving_charisma }}
+                                {% endif %}
+                            </li>
+                        </ul>
+                    </div>
+                    {% if object_list.user_id == request.user.pk %}
+                        <div class="card-footer text-center">
+                            <a type="button" class="btn btn-warning btn-sm"
+                               href="{% url 'update_savings' pk=proficiencies.pk char=object_list.pk %}">Proficiencies</a>
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="card mt-3">
+                    <div class="card-header">
+                        <h5 class="card-title">Skills</h5>
+                    </div>
+                    <div class="card-body">
+                        <ul style="list-style-type:none;">
+                            <li>
+                                {% if proficiencies.achrobatics %}
+                                    <input class="form-check-input" type="checkbox" name="flexRadioDefault"
+                                           checked disabled>
+                                    acrobatics:
+                                    {% if object_list.achrobatics|add:object_list.proficientyBonus > 0 %}+{% endif %}
+                                    {{ object_list.acrobatics|add:object_list.proficientyBonus }}
+                                {% else %}
+                                    <input class="form-check-input" type="checkbox" name="flexRadioDefault"
+                                           disabled>
+                                    acrobatics:
+                                    {% if object_list.achrobatics > 0 %}+{% endif %}
+                                    {{ object_list.acrobatics }}
+                                {% endif %}
+                            </li>
+                            <li>
+                                {% if proficiencies.medicine %}
+                                    <input class="form-check-input" type="checkbox" name="flexRadioDefault"
+                                           checked disabled>
+                                    medicine:
+                                    {% if object_list.medicine|add:object_list.proficientyBonus > 0 %}+{% endif %}
+                                    {{ object_list.medicine|add:object_list.proficientyBonus }}
+                                {% else %}
+                                    <input class="form-check-input" type="checkbox" name="flexRadioDefault"
+                                           disabled>
+                                    medicine:
+                                    {% if object_list.medicine > 0 %}+{% endif %}
+                                    {{ object_list.medicine }}
+                                {% endif %}
+                            </li>
+                            <li>
+                                {% if proficiencies.animalHandling %}
+                                    <input class="form-check-input" type="checkbox" name="flexRadioDefault"
+                                           checked disabled>
+                                    animalHandling:
+                                    {% if object_list.animalHandling|add:object_list.proficientyBonus > 0 %}+{% endif %}
+                                    {{ object_list.animalHandling|add:object_list.proficientyBonus }}
+                                {% else %}
+                                    <input class="form-check-input" type="checkbox" name="flexRadioDefault"
+                                           disabled>
+                                    animalHandling:
+                                    {% if object_list.animalHandling > 0 %}+{% endif %}
+                                    {{ object_list.animalHandling }}
+                                {% endif %}
+                            </li>
+                            <li>
+                                {% if proficiencies.nature %}
+                                    <input class="form-check-input" type="checkbox" name="flexRadioDefault"
+                                           checked disabled>
+                                    nature:
+                                    {% if object_list.nature|add:object_list.proficientyBonus > 0 %}+{% endif %}
+                                    {{ object_list.nature|add:object_list.proficientyBonus }}
+                                {% else %}
+                                    <input class="form-check-input" type="checkbox" name="flexRadioDefault"
+                                           disabled>
+                                    nature:
+                                    {% if object_list.nature > 0 %}+{% endif %}
+                                    {{ object_list.nature }}
+                                {% endif %}
+                            </li>
+                            <li>
+                                {% if proficiencies.arcana %}
+                                    <input class="form-check-input" type="checkbox" name="flexRadioDefault"
+                                           checked disabled>
+                                    arcana:
+                                    {% if object_list.arcana|add:object_list.proficientyBonus > 0 %}+{% endif %}
+                                    {{ object_list.arcana|add:object_list.proficientyBonus }}
+                                {% else %}
+                                    <input class="form-check-input" type="checkbox" name="flexRadioDefault"
+                                           disabled>
+                                    arcana:
+                                    {% if object_list.arcana > 0 %}+{% endif %}
+                                    {{ object_list.arcana }}
+                                {% endif %}
+                            </li>
+                            <li>
+                                {% if proficiencies.perception %}
+                                    <input class="form-check-input" type="checkbox" name="flexRadioDefault"
+                                           checked disabled>
+                                    perception:
+                                    {% if object_list.perception|add:object_list.proficientyBonus > 0 %}+{% endif %}
+                                    {{ object_list.perception|add:object_list.proficientyBonus }}
+                                {% else %}
+                                    <input class="form-check-input" type="checkbox" name="flexRadioDefault"
+                                           disabled>
+                                    perception:
+                                    {% if object_list.perception > 0 %}+{% endif %}
+                                    {{ object_list.perception }}
+                                {% endif %}
+                            </li>
+                            <li>
+                                {% if proficiencies.athletics %}
+                                    <input class="form-check-input" type="checkbox" name="flexRadioDefault"
+                                           checked disabled>
+                                    athletics:
+                                    {% if object_list.athletics|add:object_list.proficientyBonus > 0 %}+{% endif %}
+                                    {{ object_list.athletics|add:object_list.proficientyBonus }}
+                                {% else %}
+                                    <input class="form-check-input" type="checkbox" name="flexRadioDefault"
+                                           disabled>
+                                    athletics:
+                                    {% if object_list.athletics > 0 %}+{% endif %}
+                                    {{ object_list.athletics }}
+                                {% endif %}
+                            </li>
+                            <li>
+                                {% if proficiencies.performance %}
+                                    <input class="form-check-input" type="checkbox" name="flexRadioDefault"
+                                           checked disabled>
+                                    performance:
+                                    {% if object_list.performance|add:object_list.proficientyBonus > 0 %}+{% endif %}
+                                    {{ object_list.performance|add:object_list.proficientyBonus }}
+                                {% else %}
+                                    <input class="form-check-input" type="checkbox" name="flexRadioDefault"
+                                           disabled>
+                                    performance:
+                                    {% if object_list.performance > 0 %}+{% endif %}
+                                    {{ object_list.performance }}
+                                {% endif %}
+                            </li>
+                            <li>
+                                {% if proficiencies.deception %}
+                                    <input class="form-check-input" type="checkbox" name="flexRadioDefault"
+                                           checked disabled>
+                                    deception:
+                                    {% if object_list.deception|add:object_list.proficientyBonus > 0 %}+{% endif %}
+                                    {{ object_list.deception|add:object_list.proficientyBonus }}
+                                {% else %}
+                                    <input class="form-check-input" type="checkbox" name="flexRadioDefault"
+                                           disabled>
+                                    deception:
+                                    {% if object_list.deception > 0 %}+{% endif %}
+                                    {{ object_list.deception }}
+                                {% endif %}
+                            </li>
+                            <li>
+                                {% if proficiencies.persuasion %}
+                                    <input class="form-check-input" type="checkbox" name="flexRadioDefault"
+                                           checked disabled>
+                                    persuasion:
+                                    {% if object_list.persuasion|add:object_list.proficientyBonus > 0 %}+{% endif %}
+                                    {{ object_list.persuasion|add:object_list.proficientyBonus }}
+                                {% else %}
+                                    <input class="form-check-input" type="checkbox" name="flexRadioDefault"
+                                           disabled>
+                                    persuasion:
+                                    {% if object_list.persuasion > 0 %}+{% endif %}
+                                    {{ object_list.persuasion }}
+                                {% endif %}
+                            </li>
+                            <li>
+                                {% if proficiencies.history %}
+                                    <input class="form-check-input" type="checkbox" name="flexRadioDefault"
+                                           checked disabled>
+                                    history:
+                                    {% if object_list.history|add:object_list.proficientyBonus > 0 %}+{% endif %}
+                                    {{ object_list.history|add:object_list.proficientyBonus }}
+                                {% else %}
+                                    <input class="form-check-input" type="checkbox" name="flexRadioDefault"
+                                           disabled>
+                                    history:
+                                    {% if object_list.history > 0 %}+{% endif %}
+                                    {{ object_list.history }}
+                                {% endif %}
+                            </li>
+                            <li>
+                                {% if proficiencies.religion %}
+                                    <input class="form-check-input" type="checkbox" name="flexRadioDefault"
+                                           checked disabled>
+                                    religion:
+                                    {% if object_list.religion|add:object_list.proficientyBonus > 0 %}+{% endif %}
+                                    {{ object_list.religion|add:object_list.proficientyBonus }}
+                                {% else %}
+                                    <input class="form-check-input" type="checkbox" name="flexRadioDefault"
+                                           disabled>
+                                    religion:
+                                    {% if object_list.religion > 0 %}+{% endif %}
+                                    {{ object_list.religion }}
+                                {% endif %}
+                            </li>
+                            <li>
+                                {% if proficiencies.insight %}
+                                    <input class="form-check-input" type="checkbox" name="flexRadioDefault"
+                                           checked disabled>
+                                    insight:
+                                    {% if object_list.insight|add:object_list.proficientyBonus > 0 %}+{% endif %}
+                                    {{ object_list.insight|add:object_list.proficientyBonus }}
+                                {% else %}
+                                    <input class="form-check-input" type="checkbox" name="flexRadioDefault"
+                                           disabled>
+                                    insight:
+                                    {% if object_list.insight > 0 %}+{% endif %}
+                                    {{ object_list.insight }}
+                                {% endif %}
+                            </li>
+                            <li>
+                                {% if proficiencies.sleightOfHand %}
+                                    <input class="form-check-input" type="checkbox" name="flexRadioDefault"
+                                           checked disabled>
+                                    sleightOfHand:
+                                    {% if object_list.sleightOfHand|add:object_list.proficientyBonus > 0 %}+{% endif %}
+                                    {{ object_list.sleightOfHand|add:object_list.proficientyBonus }}
+                                {% else %}
+                                    <input class="form-check-input" type="checkbox" name="flexRadioDefault"
+                                           disabled>
+                                    sleightOfHand:
+                                    {% if object_list.sleightOfHand > 0 %}+{% endif %}
+                                    {{ object_list.sleightOfHand }}
+                                {% endif %}
+                            </li>
+                            <li>
+                                {% if proficiencies.intimidation %}
+                                    <input class="form-check-input" type="checkbox" name="flexRadioDefault"
+                                           checked disabled>
+                                    intimidation:
+                                    {% if object_list.intimidation|add:object_list.proficientyBonus > 0 %}+{% endif %}
+                                    {{ object_list.intimidation|add:object_list.proficientyBonus }}
+                                {% else %}
+                                    <input class="form-check-input" type="checkbox" name="flexRadioDefault"
+                                           disabled>
+                                    intimidation:
+                                    {% if object_list.intimidation > 0 %}+{% endif %}
+                                    {{ object_list.intimidation }}
+                                {% endif %}
+                            </li>
+                            <li>
+                                {% if proficiencies.stealth %}
+                                    <input class="form-check-input" type="checkbox" name="flexRadioDefault"
+                                           checked disabled>
+                                    stealth:
+                                    {% if object_list.stealth|add:object_list.proficientyBonus > 0 %}+{% endif %}
+                                    {{ object_list.stealth|add:object_list.proficientyBonus }}
+                                {% else %}
+                                    <input class="form-check-input" type="checkbox" name="flexRadioDefault"
+                                           disabled>
+                                    stealth:
+                                    {% if object_list.stealth > 0 %}+{% endif %}
+                                    {{ object_list.stealth }}
+                                {% endif %}
+                            </li>
+                            <li>
+                                {% if proficiencies.investigation %}
+                                    <input class="form-check-input" type="checkbox" name="flexRadioDefault"
+                                           checked disabled>
+                                    investigation:
+                                    {% if object_list.investigation|add:object_list.proficientyBonus > 0 %}+{% endif %}
+                                    {{ object_list.investigation|add:object_list.proficientyBonus }}
+                                {% else %}
+                                    <input class="form-check-input" type="checkbox" name="flexRadioDefault"
+                                           disabled>
+                                    investigation:
+                                    {% if object_list.investigation > 0 %}+{% endif %}
+                                    {{ object_list.investigation }}
+                                {% endif %}
+                            </li>
+                            <li>
+                                {% if proficiencies.survival %}
+                                    <input class="form-check-input" type="checkbox" name="flexRadioDefault"
+                                           checked disabled>
+                                    survival:
+                                    {% if object_list.survival|add:object_list.proficientyBonus > 0 %}+{% endif %}
+                                    {{ object_list.survival|add:object_list.proficientyBonus }}
+                                {% else %}
+                                    <input class="form-check-input" type="checkbox" name="flexRadioDefault"
+                                           disabled>
+                                    survival:
+                                    {% if object_list.survival > 0 %}+{% endif %}
+                                    {{ object_list.survival }}
+                                {% endif %}
+                            </li>
+                        </ul>
+                    </div>
+                    {% if object_list.user_id == request.user.pk %}
+                        <div class="card-footer text-center">
+                            <a type="button" class="btn btn-warning btn-sm"
+                               href="{% url 'update_skills' pk=proficiencies.pk char=object_list.pk %}">Proficiencies</a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-3">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title">Weapons</h5>
+                    </div>
+                    <div class="card-body">
+                        <ul>
+                            {% for p in weapons %}
+                                <li class="mt-2">
+                                    {{ p.name }}: {{ p.damage }} + {{ p.attackBonus }}
+                                    <br>
+                                    {{ p.get_type_display }}
+                                    <br>
+                                    {{ p.description }}
+                                    <br>
+                                    {% if object_list.user_id == request.user.pk %}
+                                        <a type="button" class="btn btn-danger btn-sm" style="height: 25px"
+                                           href="{% url 'rmv_weapon' pk=p.id char=object_list.pk %}">X</a>
+                                    {% endif %}
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    {% if object_list.user_id == request.user.pk %}
+                        <div class="card-footer">
+                            <a type="button" class="btn btn-warning btn-sm"
+                               href="{% url 'add_weapon' char=object_list.pk %}">Add</a>
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="card mt-3">
+                    <div class="card-header">
+                        <h5 class="card-title">Equipment</h5>
+                    </div>
+                    <div class="card-body">
+                        {% for p in equipment %}
+                            <li class="mt-2">
+                                {{ p.name }}:
+                                <br>
+                                {{ p.description }}
+                                <br>
+                                {% if object_list.user_id == request.user.pk %}
+                                    <a type="button" class="btn btn-danger btn-sm" style="height: 25px"
+                                       href="{% url 'rmv_equipment' pk=p.id char=object_list.pk %}">X</a>
+                                {% endif %}
+                            </li>
+                        {% endfor %}
+                    </div>
+                    {% if object_list.user_id == request.user.pk %}
+                        <div class="card-footer">
+                            <a type="button" class="btn btn-warning btn-sm"
+                               href="{% url 'add_equipment' char=object_list.pk %}">Add</a>
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="card mt-3">
+                    <div class="card-body">
+                        <ul style="list-style-type:none;">
+                            <li>CP: {{ object_list.CP }}</li>
+                            <li>SP: {{ object_list.SP }}</li>
+                            <li>EP: {{ object_list.EP }}</li>
+                            <li>GP: {{ object_list.GP }}</li>
+                            <li>PP: {{ object_list.PP }}</li>
+                        </ul>
+                    </div>
+                    {% if object_list.user_id == request.user.pk %}
+                        <div class="card-footer">
+                            <a type="button" class="btn btn-warning btn-sm"
+                               href="{% url 'update_money' pk=object_list.pk %}">Manage</a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-3">
+                <div class="card">
+                    <div class="card-body">
+                        {{ object_list.fisical_description }}
+                    </div>
+                    <div class="card-footer">
+                        Fisical Description
+                    </div>
+                </div>
+                <div class="card mt-3">
+                    <div class="card-body">
+                        {{ object_list.personality_traits }}
+                    </div>
+                    <div class="card-footer">
+                        Personality Traits
+                    </div>
+                </div>
+                <div class="card mt-3">
+                    <div class="card-header">
+                        <h5 class="card-title">Abilities</h5>
+                    </div>
+                    <div class="card-body">
+                        {% for p in abilities %}
+                            <li class="mt-2">
+                                {{ p.name }}:
+                                <br>
+                                {{ p.effect }}
+                                <br>
+                                {% if object_list.user_id == request.user.pk %}
+                                    <a type="button" class="btn btn-danger btn-sm" style="height: 25px"
+                                       href="{% url 'rmv_ability' pk=p.id char=object_list.pk %}">X</a>
+                                {% endif %}
+                            </li>
+                        {% endfor %}
+                    </div>
+                    {% if object_list.user_id == request.user.pk %}
+                        <div class="card-footer">
+                            <a type="button" class="btn btn-warning btn-sm"
+                               href="{% url 'add_ability' char=object_list.pk %}">Add</a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+{% endblock %}

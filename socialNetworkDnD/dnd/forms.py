@@ -7,11 +7,12 @@ from dnd.models import Profile
 # widget=forms.FileInput(),
 class UpdateProfileForm(forms.ModelForm):
     bio = forms.CharField(widget=forms.TextInput(attrs={"class": "form-control mb-3"}), required=False)
+    experience = forms.CharField(widget=forms.Textarea(attrs={"class": "form-control", "rows": "3"}), required=False)
     img = forms.FileField(widget=forms.FileInput(), required=False)
 
     class Meta:
         model = Profile
-        fields = ("bio", "img")
+        fields = ("bio", "img", "experience")
 
 
 class UpdateUserForm(forms.ModelForm):
